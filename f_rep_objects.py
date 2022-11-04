@@ -1,10 +1,31 @@
 import numpy as np
-from phong_reflection_model import compute_intensity
 from utils import normalize
 
-class Sphere:
+from abc import ABC, abstractmethod
 
-    def __init__(self, x, y, z, r, color, ks, kd, a):
+class FObject(ABC):
+
+    @abstractmethod
+    def point_of_intersection(self, ray_V, P0):
+        pass
+
+    @abstractmethod
+    def normal_at_point(self, point):
+        pass
+
+    
+    def bounce_vector_at_point(self, point, light_pos, N):
+        R1 = normalize(light_pos[:3] - point)
+
+        Rr = 2*N*(np.dot(R1,N)) - R1
+
+        return normalize(Rr)
+
+
+
+class Sphere(FObject):
+
+    def __init__(self, x, y, z, r, color, ks, kd, ka, a):
         
         self.center = np.array([x,y,z,1])
         self.radius = r
@@ -12,6 +33,7 @@ class Sphere:
         self.color = color
         self.ks = ks
         self.kd = kd
+        self.ka = ka
         self.a = a
     
     def point_of_intersection(self, ray_V, P0):
@@ -38,12 +60,4 @@ class Sphere:
         N = normalize(point - self.center[:3])
         return N
 
-    
-    def bounce_vector_at_point(self, point, light_pos, N):
-        # TODO
-        R1 = normalize(light_pos[:3] - point)
-
-        Rr = 2*N*(np.dot(R1,N)) - R1
-
-        return normalize(Rr)
         

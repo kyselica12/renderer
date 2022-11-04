@@ -1,0 +1,5 @@
+__pycache__/
+__pycache__/colors.cpython-39.pyc
+__pycache__/phong_reflection_model.cpython-39.pyc
+__pycache__/sphere.cpython-39.pyc
+__pycache__/utils.cpython-39.pyc
