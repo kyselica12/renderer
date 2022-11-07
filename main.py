@@ -120,7 +120,7 @@ class Main:
 
 
 
-m = Main(201)
+m = Main(501)
 s = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, 1)
 s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, 1)
 m.add_object(s)
