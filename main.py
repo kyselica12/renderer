@@ -140,15 +140,11 @@ if __name__ == "__main__":
     m.add_object(s2)
 
 
-<<<<<<< HEAD
-m = Main(501)
-s = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, 1)
-s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, 1)
+m = Main(201)
+s = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, .05, 10)
+s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, .05, 10)
 m.add_object(s)
 m.add_object(s2)
 
 
 m.run()
-=======
-    m.run()
->>>>>>> a9079488a7771a4d29fc80cec13c041f622acc9f
