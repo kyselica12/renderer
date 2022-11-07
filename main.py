@@ -2,10 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # from GUI import GUI, EventTypes
-from utils import normalize
-from sphere import Sphere
-from colors import *
-from phong_reflection_model import compute_intensity
+from utils import *
+from f_rep_objects import Sphere
 
 class Main:
 
@@ -33,64 +31,80 @@ class Main:
         image = self.ray_tracing()
         plt.imshow(image)
         plt.show()
-        # self.gui.draw(image)
 
-        # for event, axis, value in self.gui.loop():
-
-        #     if event == EventTypes.rotation:
-        #         ...
-        #     elif event == EventTypes.translation:
-        #         ...
-        #     elif event == EventTypes.light:
-        #         ...
-        #     elif event == EventTypes.cmd:
-        #         ...
-
-        #     # self.gui.draw(self.image)
-
-    def get_color(self, ray):        
-        # return self.color
-        winner = None, np.inf, None
-        for i, o in enumerate(self.objects):
+    def get_closest_object(self, ray):
+        winner = {"obj": None, "distance": np.inf, "point": None}
+        for o in self.objects:
             p = o.point_of_intersection(ray, self.camera_pos)
             if p is None:
                 continue
             d = np.linalg.norm(p - self.camera_pos)
 
-            if d < winner[1]:
-                winner = i, d, p
+            if d < winner["distance"]:
+                winner["obj"] = o
+                winner["distance"] = d
+                winner["point"] = p
 
-            
-        if winner[0] is None:
-            return None
+        return winner["obj"], winner["point"]
 
-        i, _, p = winner
-        o = self.objects[i]
-
-        L = normalize(self.light_pos[:3] - p)
+    def is_visible(self, obj, p):
         light_distance = np.linalg.norm(self.light_pos[:3] - p)
-        for j, o2 in enumerate(self.objects):
-            if j == i:
+        light_direction = normalize(self.light_pos[:3] - p)
+        
+        for o2 in self.objects:
+            if o2 == obj:
                 continue 
-            p2 = o2.point_of_intersection(L, p)
+            
+            p2 = o2.point_of_intersection(light_direction, p)
             
             if p2 is not None:
                 light_distance2 = np.linalg.norm(self.light_pos[:3] - p2)
+                
                 if light_distance2 < light_distance:
-                    return BLACK
-
+                    return False
         
-        N = o.normal_at_point(p)
-        R = o.bounce_vector_at_point(p ,self.light_pos, N)
-        V = normalize(self.camera_pos[:3] - p)
+        return True
 
-        intensity = compute_intensity(o.color, o.ks,o.kd, o.a, 
-                                      L, N, R, V, 
-                                      self.light_intensity) 
+    def phong_reflection_model(self, o, p, ray, visible):
+        '''
+        ka - ambient reflection constant
+        ks - specular reflection constant
+        kd - diffuse reflection constant
+        a - shininess constant
+        L - the direction vector from the point on the surface toward each light source 
+        N - the normal at this point on the surface
+        R - the direction that a perfectly reflected ray of light would take from this point on the surface
+        V - the direction pointing towards the viewer
+        '''
+
+        ambient = o.ka * self.light_intensity
+
+        if visible:
+            L = normalize(self.light_pos[:3] - p)
+            N = o.normal_at_point(p)
+            R = o.bounce_vector_at_point(p ,self.light_pos, N)
+            V = -ray
+
+            specular = o.ks * max(0, np.dot(R, V))**o.a
+            diffuse = o.kd * max(0, np.dot(N, L))
+        else:
+            specular = 0
+            diffuse = 0
+
+        return self.light_intensity * (ambient + diffuse + specular) 
+
+    def get_color(self, ray):        
+        o, p = self.get_closest_object(ray)
+
+        if o is None:
+            return None
+
+        visible = self.is_visible(o, p)
+
+        intensity = self.phong_reflection_model(o, p, ray, visible)
 
         color = o.color * intensity
         color[color < 0] = 0
-        # print(max(color))
         color[color > 255] = 255
 
         return color
@@ -118,8 +132,15 @@ class Main:
         return image
 
 
+if __name__ == "__main__":
+    m = Main(501)
+    s = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, 0.05, 1)
+    s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, 0.05, 1)
+    m.add_object(s)
+    m.add_object(s2)
 
 
+<<<<<<< HEAD
 m = Main(501)
 s = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, 1)
 s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, 1)
@@ -128,3 +149,6 @@ m.add_object(s2)
 
 
 m.run()
+=======
+    m.run()
+>>>>>>> a9079488a7771a4d29fc80cec13c041f622acc9f
