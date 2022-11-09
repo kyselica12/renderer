@@ -9,8 +9,6 @@ class Main:
 
     def __init__(self, size=501):
 
-        # self.gui = GUI(width=size, height=size)
-
         self.object = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, .05, 10)
 
         self.light_pos = np.array([0,8000,0,1])

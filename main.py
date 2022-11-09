@@ -135,16 +135,10 @@ class Main:
 if __name__ == "__main__":
     m = Main(501)
     s = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, 0.05, 1)
-    s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, 0.05, 1)
+    # s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, 0.05, 1)
     m.add_object(s)
-    m.add_object(s2)
+    # m.add_object(s2)
+    m.run()
 
 
-m = Main(201)
-s = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, .05, 10)
-s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, .05, 10)
-m.add_object(s)
-m.add_object(s2)
 
-
-m.run()
