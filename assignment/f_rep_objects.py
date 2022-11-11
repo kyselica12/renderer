@@ -25,7 +25,7 @@ class Sphere(FObject):
 
     def __init__(self, x, y, z, r, color, ks, kd, ka, a):
         
-        self.center = np.array([x,y,z,1])
+        self.center = np.array([x,y,z])
         self.radius = r
 
         self.color = color
@@ -36,9 +36,10 @@ class Sphere(FObject):
     
     def point_of_intersection(self, ray_V, P0):
         # TODO
-        p = np.array([])
         
-        return p
+        p = np.array([0,0,0])
+        
+        return None
 
     
     def normal_at_point(self, point):

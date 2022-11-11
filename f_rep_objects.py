@@ -5,6 +5,14 @@ from abc import ABC, abstractmethod
 
 class FObject(ABC):
 
+    def __init__(self, color, ks, kd, ka, a) -> None:
+        self.ks = ks
+        self.kd = kd
+        self.ka = ka
+        self.a = a
+        self.color = color
+        super().__init__()
+
     @abstractmethod
     def point_of_intersection(self, ray_V, P0):
         pass

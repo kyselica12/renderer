@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # from GUI import GUI, EventTypes
 from utils import *
-from f_rep_objects import Sphere
+from f_rep_objects import Sphere, FObject
 
 class Main:
 
@@ -11,7 +11,7 @@ class Main:
 
         self.object = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, .05, 10)
 
-        self.light_pos = np.array([0,8000,0,1])
+        self.light_pos = np.array([0,8000,0])
         self.light_intensity = 0.1
 
         self.camera_pos = np.array([0,0,-1000])
@@ -29,7 +29,7 @@ class Main:
         plt.show()
 
 
-    def phong_reflection_model(self, o, p, ray, visible):
+    def phong_reflection_model(self, o: FObject, p, ray, visible):
         '''
         ka - ambient reflection constant
         ks - specular reflection constant
@@ -40,11 +40,25 @@ class Main:
         R - the direction that a perfectly reflected ray of light would take from this point on the surface
         V - the direction pointing towards the viewer
         '''
-        # TODO
+        if p == None:
+            return 0
 
-        specular = 0
-        diffuse = 0
-        ambient = 0
+        # TODO
+        ka = o.ka
+        kd = o.kd
+        ks = o.ks
+        alpha = o.a
+
+        I = self.light_intensity
+
+        N = o.normal_at_point(p)
+        L = None # self.light_pos
+        V = None
+        R = None
+        
+        specular = ka * I
+        diffuse = I * kd * ...
+        ambient = I * ka * ...
         
         return self.light_intensity * (ambient + diffuse + specular) 
 

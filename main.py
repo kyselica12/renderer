@@ -29,6 +29,7 @@ class Main:
 
     def run(self):
         image = self.ray_tracing()
+        print(image.shape)
         plt.imshow(image)
         plt.show()
 
@@ -77,7 +78,7 @@ class Main:
         V - the direction pointing towards the viewer
         '''
 
-        ambient = o.ka * self.light_intensity
+        ambient = o.ka 
 
         if visible:
             L = normalize(self.light_pos[:3] - p)
@@ -133,11 +134,11 @@ class Main:
 
 
 if __name__ == "__main__":
-    m = Main(501)
-    s = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, 0.05, 1)
-    # s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, 0.05, 1)
+    m = Main(201)
+    s = Sphere(0, 0, 0, 50, RED, 0.5, 0.5, 0., 1)
+    s2 = Sphere(50, 100, 0, 50, GREEN, 0.5, 0.5, 0., 1)
     m.add_object(s)
-    # m.add_object(s2)
+    m.add_object(s2)
     m.run()
 
 
